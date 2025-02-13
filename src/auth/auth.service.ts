@@ -1,7 +1,7 @@
 import {
   BadRequestException,
+  ConflictException,
   Injectable,
-  InternalServerErrorException,
 } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { User } from './entities/user.entity';
@@ -22,17 +22,19 @@ export class AuthService {
   ) {}
 
   async createUser(createUserDto: CreateUserDto) {
-    try {
-      const { password, ...userData } = createUserDto;
-      const user = this.userRepository.create({
-        ...userData,
-        password: bcrypt.hashSync(password, 10),
-      });
-      await this.userRepository.save(user);
-      return user;
-    } catch (error) {
-      this.handleDBErrors(error);
+    const { password, ...userData } = createUserDto;
+    const user = await this.userRepository.findOne({
+      where: { email: userData.email },
+    });
+    if (user) {
+      throw new ConflictException('User already exists');
     }
+    const newUser = this.userRepository.create({
+      ...userData,
+      password: bcrypt.hashSync(password, 10),
+    });
+    await this.userRepository.save(newUser);
+    return newUser;
   }
 
   async login(loginUserDto: LoginUserDto) {
@@ -55,13 +57,5 @@ export class AuthService {
   private getJwtToken(payload: JwtPayload) {
     const token = this.jwtService.sign(payload);
     return token;
-  }
-
-  private handleDBErrors(error: any): never {
-    if (error.code === '23505') throw new BadRequestException(error.detail);
-
-    console.log(error);
-
-    throw new InternalServerErrorException('Please check server logs');
   }
 }
