@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 
 import { AuthModule } from './auth/auth.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { ShippingOrdersModule } from './shipping-orders/shipping-orders.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       synchronize: true, // Solo para desarrollo, no usar en producción
     }),
     AuthModule,
+    ShippingOrdersModule,
   ],
   controllers: [],
   providers: [],
