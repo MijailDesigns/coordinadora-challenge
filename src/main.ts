@@ -2,6 +2,14 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { Logger, ValidationPipe } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { SecuritySchemeObject } from '@nestjs/swagger/dist/interfaces/open-api-spec.interface';
+
+const options: SecuritySchemeObject = {
+  name: 'Authorization',
+  description: 'Enter token',
+  type: 'http',
+  in: 'Header',
+};
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -17,9 +25,10 @@ async function bootstrap() {
   );
 
   const config = new DocumentBuilder()
-    .setTitle('Teslo RESTFul API')
-    .setDescription('Teslo shop endpoints')
+    .setTitle('Coordinadora RESTFul API')
+    .setDescription('Coordinadora endpoints')
     .setVersion('1.0')
+    .addBearerAuth(options, 'TOKEN')
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
