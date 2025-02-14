@@ -10,6 +10,9 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ShippingOrdersModule } from './shipping-orders/shipping-orders.module';
 import { ApiTokenMiddleware } from './auth/middlewares/api-token.middleware';
 import { envs } from './config/envs';
+import { RoutesModule } from './routes/routes.module';
+import { DriversModule } from './drivers/drivers.module';
+import { TrucksModule } from './trucks/trucks.module';
 
 @Module({
   imports: [
@@ -25,6 +28,9 @@ import { envs } from './config/envs';
     }),
     AuthModule,
     ShippingOrdersModule,
+    RoutesModule,
+    DriversModule,
+    TrucksModule,
   ],
   controllers: [],
   providers: [],

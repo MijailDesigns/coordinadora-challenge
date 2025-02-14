@@ -2,10 +2,14 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinTable,
+  ManyToOne,
   PrimaryGeneratedColumn,
+  RelationId,
 } from 'typeorm';
 import SHIPPING_STATUS from '../../shared/enums/shipping-status';
 import { IsInt, IsString, Min } from 'class-validator';
+import { Route } from '../../routes/entities/route.entity';
 
 @Entity()
 export class ShippingOrder {
@@ -61,4 +65,12 @@ export class ShippingOrder {
 
   @Column({ nullable: true })
   deliveredAt: Date;
+
+  @RelationId((shippingOrder: ShippingOrder) => shippingOrder.route)
+  @Column('int', { nullable: true })
+  routeId?: number;
+
+  @ManyToOne(() => Route, (route) => route.shippingOrders, { nullable: true })
+  @JoinTable()
+  route: Route;
 }
