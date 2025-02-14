@@ -4,6 +4,7 @@ import { UpdateShippingOrderDto } from './dto/update-shipping-order.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { ShippingOrder } from './entities/shipping-order.entity';
+import { PaginationDto } from '../shared/dtos/pagination.dto';
 
 @Injectable()
 export class ShippingOrdersService {
@@ -18,8 +19,16 @@ export class ShippingOrdersService {
     return this.shippingOrderRepository.save(shipping);
   }
 
-  findAll() {
-    return `This action returns all shippingOrders`;
+  async findAll(paginationDto: PaginationDto) {
+    const { limit, offset } = paginationDto;
+    const [result, total] = await this.shippingOrderRepository.findAndCount({
+      take: limit,
+      skip: offset,
+    });
+    return {
+      result,
+      total,
+    };
   }
 
   findOne(id: number) {
