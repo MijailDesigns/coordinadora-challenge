@@ -1,4 +1,12 @@
-import { Controller, Get, Post, Body, Patch, Param } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  ParseIntPipe,
+} from '@nestjs/common';
 import { ShippingOrdersService } from './shipping-orders.service';
 import { CreateShippingOrderDto } from './dto/create-shipping-order.dto';
 import { UpdateShippingOrderDto } from './dto/update-shipping-order.dto';
@@ -20,13 +28,13 @@ export class ShippingOrdersController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.shippingOrdersService.findOne(+id);
+  findOne(@Param('id', ParseIntPipe) id: number) {
+    return this.shippingOrdersService.findOne(id);
   }
 
   @Patch(':id')
   update(
-    @Param('id') id: string,
+    @Param('id', ParseIntPipe) id: number,
     @Body() updateShippingOrderDto: UpdateShippingOrderDto,
   ) {
     return this.shippingOrdersService.update(+id, updateShippingOrderDto);

@@ -23,7 +23,7 @@ export class ShippingOrdersService {
   }
 
   findOne(id: number) {
-    return `This action returns a #${id} shippingOrder`;
+    return this.shippingOrderRepository.findOneBy({ id });
   }
 
   update(id: number, updateShippingOrderDto: UpdateShippingOrderDto) {
