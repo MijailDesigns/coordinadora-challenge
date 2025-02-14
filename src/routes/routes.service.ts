@@ -33,16 +33,17 @@ export class RoutesService {
   }
 
   async update(id: number, updateRouteDto: UpdateRouteDto) {
-    const driverId = updateRouteDto.driverId;
     const route = await this.routeRepository.findOneBy({ id });
     if (!route) {
       throw new BadRequestException('Route not found');
     }
-    const checkDriverWithTruck = await this.driversService.findOne(driverId);
-    if (!checkDriverWithTruck?.truckId) {
-      throw new BadRequestException('Driver is not available for this route');
+    if (updateRouteDto.driverId) {
+      const driverId = updateRouteDto.driverId;
+      const checkDriverWithTruck = await this.driversService.findOne(driverId);
+      if (!checkDriverWithTruck?.truckId) {
+        throw new BadRequestException('Driver is not available for this route');
+      }
     }
-
     return this.routeRepository.update(id, updateRouteDto);
   }
 
