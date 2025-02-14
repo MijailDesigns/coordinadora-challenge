@@ -5,12 +5,13 @@ import {
   Body,
   Patch,
   Param,
-  Delete,
+  ParseIntPipe,
 } from '@nestjs/common';
 import { DriversService } from './drivers.service';
 import { CreateDriverDto } from './dto/create-driver.dto';
 import { UpdateDriverDto } from './dto/update-driver.dto';
 import { ApiBearerAuth } from '@nestjs/swagger';
+import { PaginationDto } from '../shared/dtos/pagination.dto';
 
 @ApiBearerAuth('TOKEN')
 @Controller('drivers')
@@ -22,23 +23,21 @@ export class DriversController {
     return this.driversService.create(createDriverDto);
   }
 
-  @Get()
-  findAll() {
-    return this.driversService.findAll();
+  @Post('search')
+  findAll(@Body() paginationDto: PaginationDto) {
+    return this.driversService.findAll(paginationDto);
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.driversService.findOne(+id);
+  findOne(@Param('id', ParseIntPipe) id: number) {
+    return this.driversService.findOne(id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateDriverDto: UpdateDriverDto) {
+  update(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() updateDriverDto: UpdateDriverDto,
+  ) {
     return this.driversService.update(+id, updateDriverDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.driversService.remove(+id);
   }
 }
