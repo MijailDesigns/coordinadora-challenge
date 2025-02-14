@@ -17,9 +17,9 @@ export class Truck {
     precision: 10,
     scale: 2,
     nullable: false,
-    default: 16_000_000,
+    default: 200,
   })
-  capacidadCarga: number;
+  capacidadPeso: number;
 
   @Column({
     type: 'decimal',
@@ -28,7 +28,25 @@ export class Truck {
     nullable: false,
     default: 16_000_000,
   })
-  capacidadDisponible: number;
+  capacidadVolumen: number;
+
+  @Column({
+    type: 'decimal',
+    precision: 10,
+    scale: 2,
+    nullable: false,
+    default: 200,
+  })
+  capacidadPesoDisponible: number;
+
+  @Column({
+    type: 'decimal',
+    precision: 10,
+    scale: 2,
+    nullable: false,
+    default: 16_000_000,
+  })
+  capacidadVolumenDisponible: number;
 
   @OneToOne(() => Driver, (driver) => driver.truck)
   driver: Driver;
