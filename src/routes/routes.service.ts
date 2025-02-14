@@ -4,6 +4,7 @@ import { UpdateRouteDto } from './dto/update-route.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Route } from './entities/route.entity';
+import { PaginationDto } from '../shared/dtos/pagination.dto';
 
 @Injectable()
 export class RoutesService {
@@ -16,8 +17,16 @@ export class RoutesService {
     return this.routeRepository.save(newRoute);
   }
 
-  findAll() {
-    return `This action returns all routes`;
+  async findAll(paginationDto: PaginationDto) {
+    const { limit, offset } = paginationDto;
+    const [result, total] = await this.routeRepository.findAndCount({
+      take: limit,
+      skip: offset,
+    });
+    return {
+      result,
+      total,
+    };
   }
 
   findOne(id: number) {
