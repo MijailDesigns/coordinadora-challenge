@@ -30,7 +30,10 @@ export class DriversService {
   }
 
   findOne(id: number) {
-    return this.driverRepository.findOneBy({ id });
+    return this.driverRepository.findOne({
+      where: { id },
+      relations: ['truck'],
+    });
   }
 
   update(id: number, updateDriverDto: UpdateDriverDto) {

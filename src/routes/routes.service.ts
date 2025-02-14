@@ -1,16 +1,15 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { CreateRouteDto } from './dto/create-route.dto';
 import { UpdateRouteDto } from './dto/update-route.dto';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { Route } from './entities/route.entity';
 import { PaginationDto } from '../shared/dtos/pagination.dto';
+import RouteRepository from './route.repository';
+import { DriversService } from '../drivers/drivers.service';
 
 @Injectable()
 export class RoutesService {
   constructor(
-    @InjectRepository(Route)
-    private readonly routeRepository: Repository<Route>,
+    private readonly routeRepository: RouteRepository,
+    private readonly driversService: DriversService,
   ) {}
   create(createRouteDto: CreateRouteDto) {
     const newRoute = this.routeRepository.create(createRouteDto);
@@ -33,8 +32,18 @@ export class RoutesService {
     return this.routeRepository.findOneBy({ id });
   }
 
-  update(id: number, updateRouteDto: UpdateRouteDto) {
-    return `This action updates a #${id} route`;
+  async update(id: number, updateRouteDto: UpdateRouteDto) {
+    const driverId = updateRouteDto.driverId;
+    const route = await this.routeRepository.findOneBy({ id });
+    if (!route) {
+      throw new BadRequestException('Route not found');
+    }
+    const checkDriverWithTruck = await this.driversService.findOne(driverId);
+    if (!checkDriverWithTruck?.truckId) {
+      throw new BadRequestException('Driver is not available for this route');
+    }
+
+    return this.routeRepository.update(id, updateRouteDto);
   }
 
   remove(id: number) {
