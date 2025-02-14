@@ -17,15 +17,23 @@ export class DriversService {
     return this.driverRepository.save(newDriver);
   }
 
-  findAll(paginationDto: PaginationDto) {
-    return `This action returns all drivers`;
+  async findAll(paginationDto: PaginationDto) {
+    const { limit, offset } = paginationDto;
+    const [result, total] = await this.driverRepository.findAndCount({
+      take: limit,
+      skip: offset,
+    });
+    return {
+      result,
+      total,
+    };
   }
 
   findOne(id: number) {
-    return `This action returns a #${id} driver`;
+    return this.driverRepository.findOneBy({ id });
   }
 
   update(id: number, updateDriverDto: UpdateDriverDto) {
-    return `This action updates a #${id} driver`;
+    return this.driverRepository.update(id, updateDriverDto);
   }
 }
