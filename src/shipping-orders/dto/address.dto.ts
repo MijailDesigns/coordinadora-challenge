@@ -1,5 +1,6 @@
 import { IsNotEmpty, IsString, Matches, Validate } from 'class-validator';
 import { IsValidCityOrDepartment } from '../validators/is-valid-city-or-department';
+import { ApiProperty } from '@nestjs/swagger';
 
 export class AddressDTO {
   @IsNotEmpty({ message: 'La dirección no puede estar vacía' })
@@ -11,12 +12,22 @@ export class AddressDTO {
       message: 'El formato de la dirección no es válido para Colombia.',
     },
   )
+  @ApiProperty({
+    description: 'Address',
+    required: true,
+    type: String,
+  })
   direccion: string;
 
   @IsNotEmpty({ message: 'La ciudad no puede estar vacía' })
   @IsString({ message: 'La ciudad debe ser una cadena de texto' })
   @Validate(IsValidCityOrDepartment, ['ciudad'], {
     message: 'La ciudad no es válida en Colombia.',
+  })
+  @ApiProperty({
+    description: 'City',
+    required: true,
+    type: String,
   })
   ciudad: string;
 
@@ -25,11 +36,21 @@ export class AddressDTO {
   @Validate(IsValidCityOrDepartment, ['departamento'], {
     message: 'El departamento no es válido en Colombia.',
   })
+  @ApiProperty({
+    description: 'Department',
+    required: true,
+    type: String,
+  })
   departamento: string;
 
   @IsNotEmpty({ message: 'El código postal no puede estar vacío' })
   @Matches(/^\d{6}$/, {
     message: 'El código postal debe tener 6 dígitos.',
+  })
+  @ApiProperty({
+    description: 'Postal code',
+    required: true,
+    type: String,
   })
   codigoPostal: string;
 }
