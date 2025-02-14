@@ -39,9 +39,9 @@ export class Route {
   fechaFinalizacion?: Date;
   @BeforeInsert()
   setFechaInicio() {
+    this.ubicacionActual = this.origen;
     if (this.inicioRuta) {
       this.fechaInicio = new Date();
-      this.ubicacionActual = this.origen;
     }
   }
 

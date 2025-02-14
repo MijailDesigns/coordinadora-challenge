@@ -1,11 +1,19 @@
 import { Injectable } from '@nestjs/common';
 import { CreateRouteDto } from './dto/create-route.dto';
 import { UpdateRouteDto } from './dto/update-route.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { Route } from './entities/route.entity';
 
 @Injectable()
 export class RoutesService {
+  constructor(
+    @InjectRepository(Route)
+    private readonly routeRepository: Repository<Route>,
+  ) {}
   create(createRouteDto: CreateRouteDto) {
-    return 'This action adds a new route';
+    const newRoute = this.routeRepository.create(createRouteDto);
+    return this.routeRepository.save(newRoute);
   }
 
   findAll() {
