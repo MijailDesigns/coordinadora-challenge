@@ -1,8 +1,19 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  ParseIntPipe,
+} from '@nestjs/common';
 import { TrucksService } from './trucks.service';
 import { CreateTruckDto } from './dto/create-truck.dto';
 import { UpdateTruckDto } from './dto/update-truck.dto';
+import { ApiBearerAuth } from '@nestjs/swagger';
+import { PaginationDto } from '../shared/dtos/pagination.dto';
 
+@ApiBearerAuth('TOKEN')
 @Controller('trucks')
 export class TrucksController {
   constructor(private readonly trucksService: TrucksService) {}
@@ -12,23 +23,21 @@ export class TrucksController {
     return this.trucksService.create(createTruckDto);
   }
 
-  @Get()
-  findAll() {
-    return this.trucksService.findAll();
+  @Post('search')
+  findAll(@Body() paginationDto: PaginationDto) {
+    return this.trucksService.findAll(paginationDto);
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.trucksService.findOne(+id);
+  findOne(@Param('id', ParseIntPipe) id: number) {
+    return this.trucksService.findOne(id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateTruckDto: UpdateTruckDto) {
+  update(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() updateTruckDto: UpdateTruckDto,
+  ) {
     return this.trucksService.update(+id, updateTruckDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.trucksService.remove(+id);
   }
 }

@@ -12,8 +12,23 @@ export class Truck {
   @Column({ type: 'varchar', length: 50, nullable: false })
   modelo: string;
 
-  @Column({ type: 'decimal', precision: 10, scale: 2, nullable: false })
+  @Column({
+    type: 'decimal',
+    precision: 10,
+    scale: 2,
+    nullable: false,
+    default: 16_000_000,
+  })
   capacidadCarga: number;
+
+  @Column({
+    type: 'decimal',
+    precision: 10,
+    scale: 2,
+    nullable: false,
+    default: 16_000_000,
+  })
+  capacidadDisponible: number;
 
   @OneToOne(() => Driver, (driver) => driver.truck)
   driver: Driver;
