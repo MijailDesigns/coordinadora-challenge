@@ -6,7 +6,7 @@ import {
   MaxLength,
   MinLength,
 } from 'class-validator';
-import ROLE from '../../shared/role';
+import ROLE from '../../shared/enums/role';
 
 export class CreateUserDto {
   @IsString()

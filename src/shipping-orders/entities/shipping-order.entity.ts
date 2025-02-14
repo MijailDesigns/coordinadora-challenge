@@ -4,7 +4,7 @@ import {
   Entity,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import SHIPPING_STATUS from '../../shared/shipping-status';
+import SHIPPING_STATUS from '../../shared/enums/shipping-status';
 import { IsInt, IsString, Min } from 'class-validator';
 
 @Entity()
@@ -14,21 +14,31 @@ export class ShippingOrder {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column('decimal', { precision: 5, scale: 2 })
+  @Column('decimal', { precision: 5, scale: 2, nullable: false })
   peso: number;
 
-  @Column()
+  @Column({ nullable: false })
   dimensiones: string;
 
   @IsString()
-  @Column()
+  @Column({ nullable: false })
   tipoProducto: string;
 
-  @Column()
-  direccionDestinatario: string;
+  @Column({ type: 'json', nullable: false })
+  direccionDestinatario: {
+    direccion: string;
+    ciudad: string;
+    departamento: string;
+    codigoPostal: string;
+  };
 
-  @Column()
-  direccionRemitente: string;
+  @Column({ type: 'json', nullable: false })
+  direccionRemitente: {
+    direccion: string;
+    ciudad: string;
+    departamento: string;
+    codigoPostal: string;
+  };
 
   @Column({
     type: 'enum',

@@ -1,12 +1,4 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Patch,
-  Param,
-  Delete,
-} from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param } from '@nestjs/common';
 import { ShippingOrdersService } from './shipping-orders.service';
 import { CreateShippingOrderDto } from './dto/create-shipping-order.dto';
 import { UpdateShippingOrderDto } from './dto/update-shipping-order.dto';
@@ -38,10 +30,5 @@ export class ShippingOrdersController {
     @Body() updateShippingOrderDto: UpdateShippingOrderDto,
   ) {
     return this.shippingOrdersService.update(+id, updateShippingOrderDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.shippingOrdersService.remove(+id);
   }
 }

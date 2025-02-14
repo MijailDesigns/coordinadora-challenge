@@ -1,4 +1,5 @@
 import { IsNotEmpty, IsNumber, Min, IsString } from 'class-validator';
+import { AddressDTO } from './address.dto';
 
 export class CreateShippingOrderDto {
   @IsNotEmpty({ message: 'El peso no puede estar vacío' })
@@ -15,10 +16,8 @@ export class CreateShippingOrderDto {
   tipoProducto: string;
 
   @IsNotEmpty({ message: 'La dirección no puede estar vacía' })
-  @IsString({ message: 'La dirección debe ser una cadena de texto' })
-  direccionDestinatario: string;
+  direccionDestinatario: AddressDTO;
 
   @IsNotEmpty({ message: 'La dirección no puede estar vacía' })
-  @IsString({ message: 'La dirección debe ser una cadena de texto' })
-  direccionRemitente: string;
+  direccionRemitente: AddressDTO;
 }

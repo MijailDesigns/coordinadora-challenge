@@ -7,7 +7,7 @@ import {
 } from 'class-validator';
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
-import ROLE from '../../shared/role';
+import ROLE from '../../shared/enums/role';
 
 @Entity()
 export class User {

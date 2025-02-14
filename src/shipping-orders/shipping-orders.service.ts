@@ -12,15 +12,6 @@ export class ShippingOrdersService {
     private readonly shippingOrderRepository: Repository<ShippingOrder>,
   ) {}
   async create(createShippingOrderDto: CreateShippingOrderDto) {
-    const checkValidAddrress = await this.checkValidAddrress(
-      createShippingOrderDto.direccionDestinatario,
-      createShippingOrderDto.direccionRemitente,
-    );
-    if (!checkValidAddrress) {
-      return {
-        message: 'Las direcciones no son validas',
-      };
-    }
     const shipping = this.shippingOrderRepository.create(
       createShippingOrderDto,
     );
@@ -37,16 +28,5 @@ export class ShippingOrdersService {
 
   update(id: number, updateShippingOrderDto: UpdateShippingOrderDto) {
     return `This action updates a #${id} shippingOrder`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} shippingOrder`;
-  }
-
-  private async checkValidAddrress(
-    direccionDestinatario: string,
-    direccionRemitente: string,
-  ) {
-    return true;
   }
 }
