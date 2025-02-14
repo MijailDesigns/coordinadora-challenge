@@ -30,7 +30,7 @@ export class RoutesService {
   }
 
   findOne(id: number) {
-    return `This action returns a #${id} route`;
+    return this.routeRepository.findOneBy({ id });
   }
 
   update(id: number, updateRouteDto: UpdateRouteDto) {
