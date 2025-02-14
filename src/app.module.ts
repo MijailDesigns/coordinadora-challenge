@@ -9,16 +9,17 @@ import { AuthModule } from './auth/auth.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ShippingOrdersModule } from './shipping-orders/shipping-orders.module';
 import { ApiTokenMiddleware } from './auth/middlewares/api-token.middleware';
+import { envs } from './config/envs';
 
 @Module({
   imports: [
     TypeOrmModule.forRoot({
       type: 'mysql',
-      host: 'localhost',
-      port: 3306,
-      username: 'user',
-      password: 'password',
-      database: 'coordinadora_db',
+      host: envs.dbHost,
+      port: envs.dbPort,
+      username: envs.dbUsername,
+      password: envs.dbPassword,
+      database: envs.dbDatabase,
       autoLoadEntities: true,
       synchronize: true,
     }),

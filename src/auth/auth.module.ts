@@ -6,6 +6,7 @@ import { User } from './entities/user.entity';
 import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { envs } from '../config';
 
 @Module({
   controllers: [AuthController],
@@ -19,7 +20,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
       inject: [ConfigService],
       useFactory: () => {
         return {
-          secret: 'secreto',
+          secret: envs.jwtSecret,
           signOptions: {
             expiresIn: '2h',
           },
