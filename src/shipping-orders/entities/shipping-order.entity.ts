@@ -17,8 +17,14 @@ export class ShippingOrder {
   @Column('decimal', { precision: 5, scale: 2, nullable: false })
   peso: number;
 
-  @Column({ nullable: false })
-  dimensiones: string;
+  @Column({ type: 'int', precision: 3, nullable: false })
+  largo: number;
+
+  @Column({ type: 'int', precision: 3, nullable: false })
+  ancho: number;
+
+  @Column({ type: 'int', precision: 3, nullable: false })
+  alto: number;
 
   @IsString()
   @Column({ nullable: false })
@@ -48,5 +54,11 @@ export class ShippingOrder {
   estado: SHIPPING_STATUS;
 
   @CreateDateColumn()
-  fechaCreacion: Date;
+  createdAt: Date;
+
+  @Column({ nullable: true })
+  onTheRouteAt: Date;
+
+  @Column({ nullable: true })
+  deliveredAt: Date;
 }
