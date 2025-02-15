@@ -10,5 +10,6 @@ import { DriversModule } from '../drivers/drivers.module';
   controllers: [RoutesController],
   providers: [RoutesService, RouteRepository],
   imports: [TypeOrmModule.forFeature([Route]), DriversModule],
+  exports: [RoutesService],
 })
 export class RoutesModule {}

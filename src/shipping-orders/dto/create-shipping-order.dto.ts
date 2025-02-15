@@ -1,4 +1,11 @@
-import { IsNotEmpty, IsNumber, Min, IsString, Max } from 'class-validator';
+import {
+  IsNotEmpty,
+  IsNumber,
+  Min,
+  IsString,
+  Max,
+  IsOptional,
+} from 'class-validator';
 import { AddressDTO } from './address.dto';
 import { ApiProperty } from '@nestjs/swagger';
 
@@ -71,4 +78,13 @@ export class CreateShippingOrderDto {
     type: AddressDTO,
   })
   direccionRemitente: AddressDTO;
+
+  @IsNumber()
+  @IsOptional()
+  @ApiProperty({
+    description: 'Route id',
+    required: false,
+    type: Number,
+  })
+  routeId: number;
 }
