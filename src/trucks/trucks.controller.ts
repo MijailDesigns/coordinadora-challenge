@@ -11,7 +11,7 @@ import { TrucksService } from './trucks.service';
 import { CreateTruckDto } from './dto/create-truck.dto';
 import { UpdateTruckDto } from './dto/update-truck.dto';
 import { ApiBearerAuth } from '@nestjs/swagger';
-import { PaginationDto } from '../shared/dtos/pagination.dto';
+import { SearchDto } from '../shared/dtos/search.dto';
 
 @ApiBearerAuth('TOKEN')
 @Controller('trucks')
@@ -24,8 +24,8 @@ export class TrucksController {
   }
 
   @Post('search')
-  findAll(@Body() paginationDto: PaginationDto) {
-    return this.trucksService.findAll(paginationDto);
+  findAll(@Body() searchDto: SearchDto) {
+    return this.trucksService.findAll(searchDto);
   }
 
   @Get(':id')

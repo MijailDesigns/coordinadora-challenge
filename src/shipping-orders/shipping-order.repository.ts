@@ -18,4 +18,15 @@ export default class ShippingOrderRepository extends Repository<ShippingOrder> {
       .where('route.id = :id', { id })
       .getOne();
   }
+
+  // async getMetrics(searchDto: SearchDto) {
+  //   const { where, skip, take } = this.getFindParams(searchDto);
+  //   return this.dataSource
+  //     .getRepository(ShippingOrder)
+  //     .createQueryBuilder('shippingOrder')
+  //     .select('shippingOrder.estado', 'estado')
+  //     .addSelect('COUNT(*)', 'total')
+  //     .groupBy('shippingOrder.estado')
+  //     .getRawMany();
+  // }
 }

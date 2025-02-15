@@ -6,10 +6,11 @@ import { ShippingOrder } from './entities/shipping-order.entity';
 import { RoutesModule } from '../routes/routes.module';
 import ShippingOrderRepository from './shipping-order.repository';
 import { TrucksModule } from '../trucks/trucks.module';
+import { FilterService } from '../shared/filters/filter.service';
 
 @Module({
   controllers: [ShippingOrdersController],
-  providers: [ShippingOrdersService, ShippingOrderRepository],
+  providers: [ShippingOrdersService, ShippingOrderRepository, FilterService],
   imports: [
     TypeOrmModule.forFeature([ShippingOrder]),
     RoutesModule,

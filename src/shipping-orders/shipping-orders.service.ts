@@ -5,7 +5,7 @@ import {
 } from '@nestjs/common';
 import { CreateShippingOrderDto } from './dto/create-shipping-order.dto';
 import { UpdateShippingOrderDto } from './dto/update-shipping-order.dto';
-import { PaginationDto } from '../shared/dtos/pagination.dto';
+import { SearchDto } from '../shared/dtos/search.dto';
 import { RoutesService } from '../routes/routes.service';
 import ShippingOrderRepository from './shipping-order.repository';
 import { ShippingOrder } from './entities/shipping-order.entity';
@@ -28,8 +28,8 @@ export class ShippingOrdersService {
     return this.shippingOrderRepository.save(shipping);
   }
 
-  async findAll(paginationDto: PaginationDto) {
-    const { limit, offset } = paginationDto;
+  async findAll(searchDto: SearchDto) {
+    const { limit, offset } = searchDto;
     const [result, total] = await this.shippingOrderRepository.findAndCount({
       take: limit,
       skip: offset,
@@ -67,6 +67,10 @@ export class ShippingOrdersService {
       weight,
     });
   }
+
+  // getMetrics(searchDto: SearchDto) {
+  //   return this.shippingOrderRepository.getMetrics(searchDto);
+  // }
 
   private async asignShippingOrderToRouteTransactions(
     shippingOrderId: number,

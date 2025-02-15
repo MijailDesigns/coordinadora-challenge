@@ -4,7 +4,7 @@ import { UpdateTruckDto } from './dto/update-truck.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Truck } from './entities/truck.entity';
 import { EntityManager, Repository } from 'typeorm';
-import { PaginationDto } from '../shared/dtos/pagination.dto';
+import { SearchDto } from '../shared/dtos/search.dto';
 
 @Injectable()
 export class TrucksService {
@@ -17,8 +17,8 @@ export class TrucksService {
     return this.truckRepository.save(newTruck);
   }
 
-  async findAll(paginationDto: PaginationDto) {
-    const { limit, offset } = paginationDto;
+  async findAll(searchDto: SearchDto) {
+    const { limit, offset } = searchDto;
     const [result, total] = await this.truckRepository.findAndCount({
       take: limit,
       skip: offset,

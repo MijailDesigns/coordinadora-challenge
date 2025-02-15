@@ -11,7 +11,7 @@ import { RoutesService } from './routes.service';
 import { CreateRouteDto } from './dto/create-route.dto';
 import { UpdateRouteDto } from './dto/update-route.dto';
 import { ApiBearerAuth } from '@nestjs/swagger';
-import { PaginationDto } from '../shared/dtos/pagination.dto';
+import { SearchDto } from '../shared/dtos/search.dto';
 
 @ApiBearerAuth('TOKEN')
 @Controller('routes')
@@ -24,8 +24,8 @@ export class RoutesController {
   }
 
   @Post('search')
-  findAll(@Body() paginationDto: PaginationDto) {
-    return this.routesService.findAll(paginationDto);
+  findAll(@Body() searchDto: SearchDto) {
+    return this.routesService.findAll(searchDto);
   }
 
   @Get(':id')

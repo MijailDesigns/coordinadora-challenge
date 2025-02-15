@@ -11,7 +11,7 @@ import { DriversService } from './drivers.service';
 import { CreateDriverDto } from './dto/create-driver.dto';
 import { UpdateDriverDto } from './dto/update-driver.dto';
 import { ApiBearerAuth } from '@nestjs/swagger';
-import { PaginationDto } from '../shared/dtos/pagination.dto';
+import { SearchDto } from '../shared/dtos/search.dto';
 
 @ApiBearerAuth('TOKEN')
 @Controller('drivers')
@@ -24,8 +24,8 @@ export class DriversController {
   }
 
   @Post('search')
-  findAll(@Body() paginationDto: PaginationDto) {
-    return this.driversService.findAll(paginationDto);
+  findAll(@Body() searchDto: SearchDto) {
+    return this.driversService.findAll(searchDto);
   }
 
   @Get(':id')

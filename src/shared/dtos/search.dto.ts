@@ -1,8 +1,9 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import { IsOptional, IsPositive, Min } from 'class-validator';
+import { FilterGroupDto } from '../filters/filter.dto';
 
-export class PaginationDto {
+export class SearchDto {
   @IsOptional()
   @IsPositive()
   @Type(() => Number)
@@ -22,4 +23,12 @@ export class PaginationDto {
     required: false,
   })
   offset?: number = 0;
+
+  @IsOptional()
+  @ApiProperty({
+    description: 'filters to apply',
+    default: [],
+    required: false,
+  })
+  filters?: FilterGroupDto[] = [];
 }

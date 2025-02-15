@@ -11,7 +11,7 @@ import { ShippingOrdersService } from './shipping-orders.service';
 import { CreateShippingOrderDto } from './dto/create-shipping-order.dto';
 import { UpdateShippingOrderDto } from './dto/update-shipping-order.dto';
 import { ApiBearerAuth } from '@nestjs/swagger';
-import { PaginationDto } from '../shared/dtos/pagination.dto';
+import { SearchDto } from '../shared/dtos/search.dto';
 
 @ApiBearerAuth('TOKEN')
 @Controller('shipping-orders')
@@ -24,9 +24,14 @@ export class ShippingOrdersController {
   }
 
   @Post('search')
-  findAll(@Body() paginationDto: PaginationDto) {
-    return this.shippingOrdersService.findAll(paginationDto);
+  findAll(@Body() searchDto: SearchDto) {
+    return this.shippingOrdersService.findAll(searchDto);
   }
+
+  // @Post('metrics')
+  // getMetrics(@Body() searchDto: SearchDto) {
+  //   return this.shippingOrdersService.getMetrics(searchDto);
+  // }
 
   @Get(':id')
   findOne(@Param('id', ParseIntPipe) id: number) {

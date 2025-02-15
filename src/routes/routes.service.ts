@@ -1,9 +1,9 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { CreateRouteDto } from './dto/create-route.dto';
 import { UpdateRouteDto } from './dto/update-route.dto';
-import { PaginationDto } from '../shared/dtos/pagination.dto';
 import RouteRepository from './route.repository';
 import { DriversService } from '../drivers/drivers.service';
+import { SearchDto } from '../shared/dtos/search.dto';
 
 @Injectable()
 export class RoutesService {
@@ -16,8 +16,8 @@ export class RoutesService {
     return this.routeRepository.save(newRoute);
   }
 
-  async findAll(paginationDto: PaginationDto) {
-    const { limit, offset } = paginationDto;
+  async findAll(searchDto: SearchDto) {
+    const { limit, offset } = searchDto;
     const [result, total] = await this.routeRepository.findAndCount({
       take: limit,
       skip: offset,
