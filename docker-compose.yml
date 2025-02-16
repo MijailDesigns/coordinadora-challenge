@@ -4,10 +4,10 @@ services:
     image: mysql:8.0
     container_name: coordinadora_db
     environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: coordinadora_db
-      MYSQL_USER: user
-      MYSQL_PASSWORD: password
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=${DB_DATABASE}
+      - MYSQL_USER=${DB_USERNAME}
+      - MYSQL_PASSWORD=${DB_PASSWORD}
     ports:
       - '3306:3306'
     volumes:
@@ -29,15 +29,16 @@ services:
       - db
       - redis
     environment:
-      PORT: 3000
-      JWT_SECRET: ESunSesdsadasdcret@
-      DB_HOST: db
-      DB_PORT: 3306
-      DB_USERNAME: user
-      DB_PASSWORD: password
-      DB_DATABASE: coordinadora_db
-      REDIS_HOST: redis
-      REDIS_PORT: 6379
+      - PORT=3000
+      - JWT_SECRET=${JWT_SECRET}
+      - DB_HOST=db
+      - DB_PORT=${DB_PORT}
+      - DB_USERNAME=${DB_USERNAME}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_DATABASE=${DB_DATABASE}
+      - REDIS_HOST=${REDIS_HOST}
+      - REDIS_PORT=${REDIS_PORT}
+      - REDIS_TTL=${REDIS_TTL}
     restart: always
 volumes:
   coordinadora_db_data:
