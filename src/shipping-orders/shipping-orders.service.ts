@@ -1,31 +1,38 @@
 import {
   BadRequestException,
+  Inject,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
 import { CreateShippingOrderDto } from './dto/create-shipping-order.dto';
 import { UpdateShippingOrderDto } from './dto/update-shipping-order.dto';
 import { SearchDto } from '../shared/dtos/search.dto';
-import { RoutesService } from '../routes/routes.service';
 import ShippingOrderRepository from './shipping-order.repository';
 import { ShippingOrder } from './entities/shipping-order.entity';
 import { Route } from '../routes/entities/route.entity';
 import { EntityManager } from 'typeorm';
 import SHIPPING_STATUS from '../shared/enums/shipping-status';
 import { TrucksService } from '../trucks/trucks.service';
+import { CACHE_MANAGER } from '@nestjs/cache-manager';
+import { Cache } from 'cache-manager';
 
 @Injectable()
 export class ShippingOrdersService {
   constructor(
     private readonly shippingOrderRepository: ShippingOrderRepository,
-    private readonly routesService: RoutesService,
     private readonly truckService: TrucksService,
+    @Inject(CACHE_MANAGER) private readonly cacheManager: Cache,
   ) {}
   async create(createShippingOrderDto: CreateShippingOrderDto) {
     const shipping = this.shippingOrderRepository.create(
       createShippingOrderDto,
     );
-    return this.shippingOrderRepository.save(shipping);
+    const savedShipping = await this.shippingOrderRepository.save(shipping);
+
+    const cacheKey = `shippingOrder_${savedShipping.id}`;
+    await this.cacheManager.set(cacheKey, savedShipping);
+
+    return savedShipping;
   }
 
   async findAll(searchDto: SearchDto) {
@@ -40,8 +47,20 @@ export class ShippingOrdersService {
     };
   }
 
-  findOne(id: number) {
-    return this.shippingOrderRepository.findOneBy({ id });
+  async findOne(id: number) {
+    const cacheKey = `shippingOrder_${id}`;
+    const cachedData = await this.cacheManager.get<ShippingOrder>(cacheKey);
+    if (cachedData) {
+      return cachedData;
+    }
+    const shippingOrder = await this.shippingOrderRepository.findOneBy({ id });
+
+    if (!shippingOrder) {
+      throw new NotFoundException('Shipping order not found');
+    }
+
+    await this.cacheManager.set(cacheKey, shippingOrder);
+    return shippingOrder;
   }
 
   async update(id: number, updateShippingOrderDto: UpdateShippingOrderDto) {
@@ -72,11 +91,14 @@ export class ShippingOrdersService {
   //   return this.shippingOrderRepository.getMetrics(searchDto);
   // }
 
-  private async asignShippingOrderToRouteTransactions(
+  protected async asignShippingOrderToRouteTransactions(
     shippingOrderId: number,
     route: Route,
     orderDimensionsAndWeight: { volume: number; weight: number },
   ) {
+    const cacheKey = `shippingOrder_${shippingOrderId}`;
+    await this.cacheManager.del(cacheKey);
+
     return this.shippingOrderRepository.manager.transaction(async (manager) => {
       await this.assignShippingOrderToRoute(manager, shippingOrderId, route.id);
       await this.truckService.updateAvailableCapacity(
@@ -92,7 +114,7 @@ export class ShippingOrdersService {
     });
   }
 
-  private async assignShippingOrderToRoute(
+  protected async assignShippingOrderToRoute(
     manager: EntityManager,
     shippingOrderId: number,
     routeId: number,
@@ -105,7 +127,7 @@ export class ShippingOrdersService {
       .execute();
   }
 
-  private calculateOrderDimensionsAndWeight(shippingOrder: ShippingOrder) {
+  protected calculateOrderDimensionsAndWeight(shippingOrder: ShippingOrder) {
     const { largo, ancho, alto } = shippingOrder;
     const volume = largo * ancho * alto;
     const weight = shippingOrder.peso;

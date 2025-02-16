@@ -13,6 +13,8 @@ import { envs } from './config/envs';
 import { RoutesModule } from './routes/routes.module';
 import { DriversModule } from './drivers/drivers.module';
 import { TrucksModule } from './trucks/trucks.module';
+import { CacheModule } from '@nestjs/cache-manager';
+import * as redisStore from 'cache-manager-redis-store';
 
 @Module({
   imports: [
@@ -25,6 +27,13 @@ import { TrucksModule } from './trucks/trucks.module';
       database: envs.dbDatabase,
       autoLoadEntities: true,
       synchronize: true,
+    }),
+    CacheModule.register({
+      store: redisStore,
+      host: 'localhost',
+      port: 6379,
+      ttl: 7200,
+      isGlobal: true,
     }),
     AuthModule,
     ShippingOrdersModule,
