@@ -12,5 +12,32 @@ services:
       - '3306:3306'
     volumes:
       - coordinadora_db_data:/var/lib/mysql
+    restart: always
+  redis:
+    image: redis:alpine
+    container_name: coordinadora_redis
+    ports:
+      - '6379:6379'
+    restart: always
+
+  app:
+    build: .
+    container_name: coordinadora_app
+    ports:
+      - '3000:3000'
+    depends_on:
+      - db
+      - redis
+    environment:
+      PORT: 3000
+      JWT_SECRET: ESunSesdsadasdcret@
+      DB_HOST: db
+      DB_PORT: 3306
+      DB_USERNAME: user
+      DB_PASSWORD: password
+      DB_DATABASE: coordinadora_db
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+    restart: always
 volumes:
   coordinadora_db_data:
