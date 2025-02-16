@@ -81,6 +81,9 @@ export class ShippingOrdersService {
     if (volume > capacidadVolumenDisponible || weight > capacidadPesoDisponible)
       throw new BadRequestException('Shipping order exceeds truck capacity');
 
+    const cacheKey = `shippingOrder_${id}`;
+    await this.cacheManager.del(cacheKey);
+
     return this.asignShippingOrderToRouteTransactions(id, checkRoute, {
       volume,
       weight,
