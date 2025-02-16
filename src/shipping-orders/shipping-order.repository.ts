@@ -2,6 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { DataSource, Repository } from 'typeorm';
 import { ShippingOrder } from './entities/shipping-order.entity';
 import { Route } from '../routes/entities/route.entity';
+// import { SearchDto } from '../shared/dtos/search.dto';
+// import * as fs from 'fs';
 
 @Injectable()
 export default class ShippingOrderRepository extends Repository<ShippingOrder> {
@@ -20,13 +22,21 @@ export default class ShippingOrderRepository extends Repository<ShippingOrder> {
   }
 
   // async getMetrics(searchDto: SearchDto) {
-  //   const { where, skip, take } = this.getFindParams(searchDto);
-  //   return this.dataSource
-  //     .getRepository(ShippingOrder)
-  //     .createQueryBuilder('shippingOrder')
-  //     .select('shippingOrder.estado', 'estado')
-  //     .addSelect('COUNT(*)', 'total')
-  //     .groupBy('shippingOrder.estado')
-  //     .getRawMany();
+  //   const { limit, offset } = searchDto;
+  //   const content = fs.readFileSync(
+  //     'src/shipping-orders/entities/queries/shipping-order-metric.sql',
+  //     'utf8',
+  //   );
+
+  //   // return await this.dataSource.query(content);
+  //   const qb = this.dataSource
+  //     .createQueryBuilder()
+  //     .select('*')
+  //     .from(`(${content})`, 'shippingOrder') // Usar la consulta SQL como subconsulta
+  //     .where('shippingOrder.some_column = :someValue', { someValue: 'value' })
+  //     .limit(limit)
+  //     .offset(offset);
+
+  //   return qb.getRawMany();
   // }
 }

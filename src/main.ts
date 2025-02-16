@@ -26,7 +26,7 @@ async function bootstrap() {
   );
 
   const config = new DocumentBuilder()
-    .setTitle('Coordinadora RESTFul API')
+    .setTitle('Coordinadora2 RESTFul API')
     .setDescription('Coordinadora endpoints')
     .setVersion('1.0')
     .addBearerAuth(options, 'TOKEN')

@@ -30,9 +30,9 @@ import * as redisStore from 'cache-manager-redis-store';
     }),
     CacheModule.register({
       store: redisStore,
-      host: 'localhost',
-      port: 6379,
-      ttl: 7200,
+      host: envs.redisHost,
+      port: envs.redisPort,
+      ttl: envs.redisTTL,
       isGlobal: true,
     }),
     AuthModule,
